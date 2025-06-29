@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Crash Game</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head><body>
+  <div class="game">
+    <h2>🔥 Crash Game</h2>
+    <p>Multiplier:<span id="multiplier">1.00x</span></p>
+    <button onclick="startCrash()">Start</button>
+    <button onclick="cashOut()">Cash Out</button>
+    <p id="cashout-msg"></p>
+  </div>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    let m=1,running=false,uid,balance=0,iv;
+    firebase.auth().onAuthStateChanged(u=>{
+      if(u){uid=u.uid;
+        firebase.firestore().collection("users").doc(uid).get()
+        .then(d=>balance=d.data().balance);
+      } else location="login.html";
+    });
+    function startCrash(){
+      m=1;running=true;
+      cashout-msg.innerText="";
+      iv=setInterval(_=>{
+        m+=0.05;multiplier.innerText=m.toFixed(2)+"x";
+        if(m>=Math.random()*4+1){clearInterval(iv);running=false;
+          cashout-msg.innerText="💥 You Crashed!";}},200);
+    }
+    function cashOut(){
+      if(!running)return;
+      clearInterval(iv);running=false;
+      const win=Math.floor(m*10);
+      balance+=win;
+      firestore().collection("users").doc(uid).update({balance})
+      .then(_=>cashout-msg.innerText="✅ Cashed ₹"+win);
+    }
+  </script>
+</body></html>
