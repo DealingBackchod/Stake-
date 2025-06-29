@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Wallet</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head><body>
+  <div class="wallet">
+    <h2>Wallet</h2>
+    <p>Balance: ₹<span id="wallet-balance">0</span></p>
+    <h3>Deposit</h3>
+    <p>Send to UPI: <b>hakimiwashifali@fam</b></p>
+    <input type="number" id="deposit"><button onclick="dep()">Paid</button>
+    <h3>Withdraw</h3>
+    <input id="withdraw" type="number"><input id="upi" placeholder="Your UPI"><button onclick="wd()">Request</button>
+  </div>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    let uid,balance=0;
+    firebase.auth().onAuthStateChanged(u=>{
+      if(u){uid=u.uid;
+        firebase.firestore().collection("users").doc(uid).get()
+        .then(d=>document.getElementById("wallet-balance").innerText=balance=d.data().balance);
+      } else location="login.html";
+    });
+    async function dep(){
+      const a=parseInt(deposit.value);
+      if(a>0){
+        balance+=a*100;
+        await firebase.firestore().collection("users").doc(uid).update({balance});
+        alert("Deposited");location.reload();
+      }
+    }
+    function wd(){
+      const a=parseInt(withdraw.value);
+      if(a*100<=balance) alert("Withdraw Requested");
+      else alert("Insufficient");
+    }
+  </script>
+</body></html>
