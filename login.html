@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Login</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head><body>
+  <div class="auth-box">
+    <h2>Login / Register</h2>
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button><br><br>
+    <button onclick="googleLogin()">Login with Google</button>
+  </div>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    function login(){firebase.auth().signInWithEmailAndPassword(email.value,password.value)
+      .then(()=>location.href="index.html").catch(e=>alert(e.message));}
+    function register(){firebase.auth().createUserWithEmailAndPassword(email.value,password.value)
+      .then(()=>alert("Registered")).catch(e=>alert(e.message));}
+    function googleLogin(){
+      firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(()=>location.href="index.html").catch(e=>alert(e.message));
+    }
+  </script>
+</body></html>
