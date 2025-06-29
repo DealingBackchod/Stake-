@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Dice Game</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head><body>
+  <div class="game">
+    <h2>🎲 Dice Game</h2>
+    <input type="number" id="chance" placeholder="Win % (1-95)">
+    <button onclick="roll()">Roll</button>
+    <p id="dice-result">-</p>
+  </div>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    let uid,balance=0;
+    firebase.auth().onAuthStateChanged(u=>{
+      if(u){uid=u.uid;
+        firebase.firestore().collection("users").doc(uid).get()
+        .then(d=>balance=d.data().balance);
+      } else location="login.html";
+    });
+    async function roll(){
+      const ch=parseInt(chance.value);
+      if(ch<1||ch>95)return alert("1–95%");
+      const r=Math.random()*100;
+      const res=r<ch?"✅ Win":"❌ Lose";
+      balance+= res==="✅ Win"?50:-50;
+      document.getElementById("dice-result").innerText=`${r.toFixed(2)} – ${res}`;
+      await firebase.firestore().collection("users").doc(uid).update({balance});
+    }
+  </script>
+</body></html>
