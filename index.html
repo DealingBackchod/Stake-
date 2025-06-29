@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stake Clone - Mines</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="header">
+    <h1>Stake Clone</h1>
+    <p>Balance: ₹<span id="balance">0</span></p>
+    <nav>
+      <a href="index.html">Mines</a> |
+      <a href="crash.html">Crash</a> |
+      <a href="dice.html">Dice</a> |
+      <a href="wallet.html">Wallet</a> |
+      <a href="admin.html">Admin</a> |
+      <button onclick="logout()">Logout</button>
+    </nav>
+  </div>
+  <div class="game">
+    <h2>Mines Game</h2>
+    <div id="grid"></div>
+  </div>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Live Payout Simulator -->
+  <div class="payout-feed">
+    <h3>🤑 Live Payouts</h3>
+    <ul id="payout-list"></ul>
+  </div>
+  <script>
+    const payouts = ["+₹120 Crash", "+₹350 Dice", "+₹700 Mines", "+₹90 Crash", "+₹420 Dice"];
+    setInterval(() => {
+      const random = payouts[Math.floor(Math.random()*payouts.length)];
+      const li = document.createElement("li");
+      li.innerText = `User${Math.floor(Math.random()*1000)} ${random}`;
+      const list = document.getElementById("payout-list");
+      list.insertBefore(li, list.firstChild);
+      if (list.children.length > 6) list.removeChild(list.lastChild);
+    }, 3000);
+  </script>
+</body>
+</html>
