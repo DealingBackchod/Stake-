@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Admin</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head><body>
+  <div class="admin">
+    <h2>Admin Login</h2>
+    <input id="admin-pass" type="password"><button onclick="check()">Login</button>
+    <div id="sec" style="display:none;"><h3>Users:</h3><ul id="list"></ul></div>
+  </div>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    function check(){
+      if(admin-pass.value==="washifali"){
+        sec.style.display="block";
+        firebase.firestore().collection("users").get()
+          .then(s=>s.forEach(d=>{let li=document.createElement("li");li.innerText=d.id+":₹"+d.data().balance;list.appendChild(li);}));
+      } else alert("Wrong");
+    }
+  </script>
+</body></html>
